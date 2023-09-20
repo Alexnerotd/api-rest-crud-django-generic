@@ -1,15 +1,24 @@
 from rest_framework import serializers
-from .models import *
+from django.contrib import messages
+from .models import MyUser
 
-
-class MyUserSerializer(serializers.ModelSerializer):
+class MyUserSerializerGET(serializers.ModelSerializer):
 
     class Meta:
         model = MyUser
-        fields = '__all__'
+        fields = ['username', 'email', 'name', 'last_name']
 
-    def create(self, validate_data):
-        user = MyUser(**validate_data)
-        user.set_password(validate_data['password'])
+    
+class MyUserSerializerPOST(serializers.ModelSerializer):
+
+    class Meta:
+        model = MyUser  # Agrega esta línea para especificar el modelo
+        fields = ['username', 'email', 'password', 'name', 'last_name']
+
+    
+    def create(self, validated_data):
+        user = MyUser(**validated_data)
+        user.set_password(validated_data['password'])
         user.save()
         return user
+
