@@ -1,5 +1,6 @@
 from .serializers import MyUser, MyUserSerializerGET, MyUserSerializerPOST
-from rest_framework import status, response, views, generics
+from rest_framework import status, response, views, generics, authentication, permissions
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 from django.core.exceptions import BadRequest 
@@ -29,5 +30,11 @@ class UserApiDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
 
     serializer_class = MyUserSerializerPOST
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+
+    def get_object(self):
+        return self.request.user
     
         
